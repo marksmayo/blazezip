@@ -25,7 +25,8 @@ jobs:
           Copy-Item target/release/blazezip.exe, LICENSE, THIRD_PARTY_NOTICES.md, README.md $name
           Copy-Item third_party/libdeflate/COPYING "$name/LICENSE-libdeflate"
           Compress-Archive -Path $name -DestinationPath "$name.zip"
-          (Get-FileHash "$name.zip" -Algorithm SHA256).Hash.ToLower() + "  $name.zip" | Out-File -Encoding ascii "$name.zip.sha256"
+          # LF line ending, so `sha256sum -c` reads it as well as Windows tools do.
+          [IO.File]::WriteAllText("$PWD/$name.zip.sha256", (Get-FileHash "$name.zip" -Algorithm SHA256).Hash.ToLower() + "  $name.zip`n")
       - name: Publish
         env:
           GH_TOKEN: ${{ github.token }}

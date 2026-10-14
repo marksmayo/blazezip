@@ -16,3 +16,12 @@ jobs:
         run: cargo build --release --workspace --locked
       - name: Test
         run: cargo test --release --locked
+
+  msrv:
+    name: Minimum Rust version (1.85)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@1.85
+      - name: Check
+        run: cargo check --locked -p blazezip

@@ -1,7 +1,14 @@
 # blazezip
 
 [![CI](https://github.com/marksmayo/blazezip/actions/workflows/ci.yml/badge.svg)](https://github.com/marksmayo/blazezip/actions/workflows/ci.yml)
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Release](https://img.shields.io/github/v/release/marksmayo/blazezip?logo=github)](https://github.com/marksmayo/blazezip/releases/latest)
+[![Downloads](https://img.shields.io/github/downloads/marksmayo/blazezip/total?logo=github)](https://github.com/marksmayo/blazezip/releases)
+[![License: MIT](https://img.shields.io/github/license/marksmayo/blazezip)](LICENSE)
+[![Platform: Windows x64](https://img.shields.io/badge/platform-Windows%20x64-0078D6?logo=windows)](#installing)
+[![Rust 1.85+](https://img.shields.io/badge/rust-1.85%2B-orange?logo=rust)](https://www.rust-lang.org)
+[![Language: Rust](https://img.shields.io/github/languages/top/marksmayo/blazezip?logo=rust)](https://github.com/marksmayo/blazezip)
+[![Formats: ZIP, Deflate, Zstandard](https://img.shields.io/badge/formats-ZIP%20%7C%20Deflate%20%7C%20Zstandard-informational)](#using-blazezip)
+[![Last commit](https://img.shields.io/github/last-commit/marksmayo/blazezip)](https://github.com/marksmayo/blazezip/commits/main)
 
 A very fast, parallel, standards-compliant ZIP archiver for Windows, plus a benchmark suite that
 pits it against 7-Zip, NanaZip, PeaZip, Bandizip, WinRAR, WinZip, Info-ZIP, pzip, zstd, pigz, LZ4
@@ -16,7 +23,7 @@ Download `blazezip-<version>-x86_64-pc-windows-msvc.zip` from
 [Releases](https://github.com/marksmayo/blazezip/releases), unzip it and put `blazezip.exe` on your
 `PATH`. Each release has a `.sha256` checksum next to it.
 
-To build from source you need Rust (stable, MSVC toolchain). LLVM's `clang-cl` is optional but
+To build from source you need Rust 1.85 or later (MSVC toolchain). LLVM's `clang-cl` is optional but
 recommended: with it, libdeflate gets its fastest (BMI2) decoder.
 
 ```
