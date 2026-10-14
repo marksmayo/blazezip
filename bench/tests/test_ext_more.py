@@ -377,3 +377,24 @@ def test_ctx_keeps_7zip_as_reference_when_runs_are_limited_to_other_tools():
     ctx = extended.Ctx(args, only_bz, reference_tools=all_tools)
     assert ctx.sevenzip is not None and ctx.sevenzip.key == "7zip"
     assert [t.key for t in ctx.tools] == ["blazezip"]
+
+
+# ----- generated data is warm before it is measured ----------------------------------------------
+
+def test_warm_files_reads_every_generated_file(tmp_path):
+    for i in range(30):
+        (tmp_path / f"d{i % 3}").mkdir(exist_ok=True)
+        (tmp_path / f"d{i % 3}" / f"f{i}.txt").write_bytes(b"x" * i)
+    assert extended.warm_files(tmp_path) == 30
+
+
+def test_ensure_warms_freshly_generated_data(tmp_path, monkeypatch):
+    # The first read of a just-written file can cost milliseconds (on-access scanning); it must
+    # not be charged to whichever tool happens to be measured first.
+    warmed = []
+    monkeypatch.setattr(extended, "warm_files", lambda p: warmed.append(p) or 0)
+    ctx = type("Ctx", (), {"data": tmp_path})()
+    p = extended.ensure(ctx, "gen", lambda d: (d / "a.txt").write_text("a"))
+    assert warmed == [p]
+    extended.ensure(ctx, "gen", lambda d: None)  # already generated: nothing to warm again
+    assert warmed == [p]

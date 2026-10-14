@@ -424,8 +424,29 @@ def ensure(ctx: Ctx, name: str, gen) -> Path:
     log(f"  generating {name} ...")
     p.mkdir(parents=True, exist_ok=True)
     gen(p)
+    warm_files(p)
     stamp.write_text("ok")
     return p
+
+
+def warm_files(d: Path) -> int:
+    """Read every file under d once, untimed. The first read of a just-written file can cost
+    milliseconds (on-access antivirus scanning, for one); without this, whichever tool is measured
+    first on freshly generated data pays it for everyone. Parallel, since the cost is latency."""
+    from concurrent.futures import ThreadPoolExecutor
+
+    def read(path):
+        try:
+            with open(path, "rb") as f:
+                while f.read(1 << 20):
+                    pass
+        except OSError:
+            pass  # unreadable on purpose (metadata tests): the tools meet it cold anyway
+
+    paths = [os.path.join(root, f) for root, _, files in os.walk(long(d)) for f in files]
+    with ThreadPoolExecutor(32) as ex:
+        list(ex.map(read, paths, chunksize=256))
+    return len(paths)
 
 
 def drop(ctx: Ctx, name: str):
