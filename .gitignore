@@ -1,0 +1,7 @@
+/target
+/results
+/tools
+__pycache__/
+.pytest_cache/
+/.benchmarks
+/.claude

@@ -1,0 +1,35 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Test
+        run: cargo test --release --locked
+      - name: Build
+        run: cargo build --release --locked -p blazezip
+      - name: Package
+        shell: pwsh
+        run: |
+          $name = "blazezip-${{ github.ref_name }}-x86_64-pc-windows-msvc"
+          New-Item -ItemType Directory $name | Out-Null
+          Copy-Item target/release/blazezip.exe, LICENSE, THIRD_PARTY_NOTICES.md, README.md $name
+          Copy-Item third_party/libdeflate/COPYING "$name/LICENSE-libdeflate"
+          Compress-Archive -Path $name -DestinationPath "$name.zip"
+          (Get-FileHash "$name.zip" -Algorithm SHA256).Hash.ToLower() + "  $name.zip" | Out-File -Encoding ascii "$name.zip.sha256"
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: pwsh
+        run: |
+          $name = "blazezip-${{ github.ref_name }}-x86_64-pc-windows-msvc"
+          gh release create "${{ github.ref_name }}" "$name.zip" "$name.zip.sha256" --title "blazezip ${{ github.ref_name }}" --generate-notes
