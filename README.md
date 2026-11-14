@@ -1,6 +1,7 @@
 # blazezip
 
 [![CI](https://github.com/marksmayo/blazezip/actions/workflows/ci.yml/badge.svg)](https://github.com/marksmayo/blazezip/actions/workflows/ci.yml)
+[![CodSpeed](https://img.shields.io/endpoint?url=https://codspeed.io/badge.json)](https://app.codspeed.io/marksmayo/blazezip?utm_source=badge)
 [![Release](https://img.shields.io/github/v/release/marksmayo/blazezip?logo=github)](https://github.com/marksmayo/blazezip/releases/latest)
 [![Downloads](https://img.shields.io/github/downloads/marksmayo/blazezip/total?logo=github)](https://github.com/marksmayo/blazezip/releases)
 [![License: MIT](https://img.shields.io/github/license/marksmayo/blazezip)](LICENSE)
@@ -1011,6 +1012,11 @@ Metrics where every tool ties award no medals. Each run goes to
 `results/ext-<timestamp>/extended.html`; `results/ext-latest-report.html` combines every
 competitor's best result with blazezip's latest. `python -m pytest bench/tests` tests the
 suite's own helpers.
+
+**Micro-benchmarks.** `cargo bench -p blazezip-bench` runs Rust micro-benchmarks of the
+portable core (libdeflate and zstd compression and decompression, CRC-32, ZIP header writing and
+parsing). They run on any OS, and [CodSpeed](https://app.codspeed.io/marksmayo/blazezip) runs them
+on every push and pull request to catch performance regressions.
 
 **Corpora.** All are standard or deterministic:
 [Silesia](https://sun.aei.polsl.pl/~sdeor/index.php?page=silesia) (the standard compression

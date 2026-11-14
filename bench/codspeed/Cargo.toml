@@ -1,0 +1,27 @@
+[package]
+name = "blazezip-bench"
+version = "0.1.0"
+edition = "2021"
+publish = false
+description = "CodSpeed benchmarks for blazezip's portable core (codecs, CRC-32, ZIP headers)"
+
+# The library only re-exports modules from ../../src; their unit tests run with the main crate.
+[lib]
+test = false
+doctest = false
+bench = false
+
+[dependencies]
+zstd = "0.14"
+crc32fast = "1.5"
+anyhow = "1"
+
+[build-dependencies]
+cc = "1"
+
+[[bench]]
+name = "core"
+harness = false
+
+[dev-dependencies]
+divan = { version = "6.0.0", package = "codspeed-divan-compat" }
