@@ -11,7 +11,7 @@ keywords = ["zip", "archiver", "deflate", "zstd", "compression"]
 categories = ["command-line-utilities", "compression"]
 
 [workspace]
-members = [".", "bench/benchrun"]
+members = [".", "bench/benchrun", "bench/codspeed"]
 
 [dependencies]
 zstd = "0.14"
